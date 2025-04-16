@@ -9,10 +9,10 @@
       { "src": "/(.*)", "dest": "/frontend/dist/$1" }
     ],
     "env": {
-    "MAILTRAP_API_KEY": "@mailtrap_api_key",
-    "MAILTRAP_API_URL": "@mailtrap_api_url",
-    "MAILTRAP_TO_EMAIL": "@mailtrap_to_email",
-    "MAILTRAP_FROM_EMAIL": "@mailtrap_from_email",
-    "MAILTRAP_FROM_NAME": "@mailtrap_from_name"
-  }
-  }
+      "MAILTRAP_API_KEY": "6b12c8ffbe8180887ccf7e6db2ffcc81",
+      "MAILTRAP_API_URL": "https://send.api.mailtrap.io/api/send",
+      "MAILTRAP_TO_EMAIL": "anlsktl1318@gmail.com",
+      "MAILTRAP_FROM_EMAIL": "hello@demomailtrap.com",
+      "MAILTRAP_FROM_NAME": "Mailtrap Test"
+    }
+}
