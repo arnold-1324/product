@@ -1,14 +1,27 @@
 {
     "version": 2,
     "builds": [
-      { "src": "backend/server.js", "use": "@vercel/node" },
-      { "src": "frontend/package.json", "use": "@vercel/static-build" }
+      {
+        "src": "backend/server.js",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "frontend/package.json",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "frontend/dist"
+        }
+      }
     ],
     "routes": [
       { "src": "/send-email", "dest": "/api/server" },
-      { "src": "/(.*)", "dest": "/frontend/dist/$1" }
+  
+      { "handle": "filesystem" },
+  
+     
+      { "src": "/(.*)", "dest": "/frontend/dist/index.html" }
     ],
-    "env": {
+   "env": {
       "MAILTRAP_API_KEY": "6b12c8ffbe8180887ccf7e6db2ffcc81",
       "MAILTRAP_API_URL": "https://send.api.mailtrap.io/api/send",
       "MAILTRAP_TO_EMAIL": "anlsktl1318@gmail.com",
@@ -16,3 +29,4 @@
       "MAILTRAP_FROM_NAME": "Mailtrap Test"
     }
   }
+  
