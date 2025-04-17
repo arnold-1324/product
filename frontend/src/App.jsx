@@ -1,10 +1,34 @@
 import React, { useState } from 'react';
-import { useRef, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
-import { sendRapidMail } from './apiMail';
+import { sendCustomerQueryMail } from './apiMail';
 import './App.css';
 
 const color = '#111111';
+
+// Toast implementation
+function Toast({ message, type, onClose }) {
+  if (!message) return null;
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 24,
+      right: 24,
+      zIndex: 9999,
+      background: type === 'success' ? '#2e8b57' : '#e74c3c',
+      color: '#fff',
+      padding: '16px 32px',
+      borderRadius: 8,
+      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+      fontWeight: 600,
+      fontSize: 16,
+      minWidth: 220,
+      textAlign: 'center',
+    }}>
+      {message}
+      <button onClick={onClose} style={{marginLeft: 16, background: 'none', border: 'none', color: '#fff', fontWeight: 700, cursor: 'pointer'}}>×</button>
+    </div>
+  );
+}
 
 const ProductImage = ({ image, alt }) => {
   return (
@@ -107,7 +131,7 @@ const App = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-  const [debug, setDebug] = useState(null);
+  const [toast, setToast] = useState({ message: '', type: 'success' });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -117,15 +141,13 @@ const App = () => {
     e.preventDefault();
     setSending(true);
     setSent(false);
-    setDebug({ form, status: 'sending' });
     try {
-      await sendRapidMail(form);
+      await sendCustomerQueryMail(form);
       setSent(true);
       setForm({ name: '', email: '', message: '' });
-      setDebug({ form, status: 'sent' });
+      setToast({ message: 'Thank you! Your query has been sent.', type: 'success' });
     } catch (err) {
-      alert('Failed to send. Please try again.');
-      setDebug({ form, status: 'error', error: err });
+      setToast({ message: 'Failed to send. Please try again.', type: 'error' });
     }
     setSending(false);
   };
@@ -137,6 +159,7 @@ const App = () => {
 
   return (
     <div className="container">
+      <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'success' })} />
       <h1 className="text-4xl font-bold text-center mb-8">Herbal Products</h1>
 
       <motion.div
@@ -221,11 +244,6 @@ const App = () => {
       <footer className="mt-12">
         <p className="font-semibold">&copy; 2025 Vino Herballife. All rights reserved.</p>
         <p>Contact us: <a href="mailto:info@vinoherbal.com" className="text-green-600">info@vinoherbal.com</a> | +91-9876543210</p>
-        {debug && (
-          <pre style={{textAlign:'left',background:'#f6f8fa',color:'#333',padding:'1em',borderRadius:8,marginTop:16,fontSize:12}}>
-            {JSON.stringify(debug, null, 2)}
-          </pre>
-        )}
       </footer>
     </div>
   );
