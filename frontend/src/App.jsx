@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useRef, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
+import { sendRapidMail } from './apiMail';
 import './App.css';
-
 
 const color = '#111111';
 
@@ -119,12 +119,7 @@ const App = () => {
     setSent(false);
     setDebug({ form, status: 'sending' });
     try {
-      const response = await fetch('http://localhost:5000/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-      if (!response.ok) throw new Error('Failed to send');
+      await sendRapidMail(form);
       setSent(true);
       setForm({ name: '', email: '', message: '' });
       setDebug({ form, status: 'sent' });
